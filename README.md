@@ -1,5 +1,5 @@
 # currencyconverter
-It’s an Utility app for currency conversion. 
+It’s a Utility app for currency conversion. 
 
 User can enter the amount, select from and to currency from the drop downs and press convert button. App shows the current conversion value of the entered amount using Frankfurter APIs.   
 
