@@ -8,26 +8,87 @@
 import XCTest
 
 class CurrencyConverterUITests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
-        continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
+    var app: XCUIApplication!
+    
+    override func setUp() {
+        super.setUp()
+        app = XCUIApplication()
+        app.launchArguments = ["-runInTestMode"]
         app.launch()
+        
+        
+        waitTillProgressViewIsVisible()
+        sleep(1)
+    }
 
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func test_default_values() throws {
+        // get handle for maount, from and to fields
+        let amount = app.textFields["AmountTextField"]
+        let fromCurrencyPicker = app.scrollViews.otherElements.buttons["FromCurrencyPicker"]
+        let toCurrencyPicker = app.scrollViews.otherElements.buttons["ToCurrencyPicker"]
+        
+        // assert default values
+        XCTAssertEqual(amount.value as? String, "$1.00")
+        XCTAssertEqual(fromCurrencyPicker.value as? String, "USD - American Dollar")
+        XCTAssertEqual(toCurrencyPicker.value as? String, "INR - Indian Rupee")
+    }
+        
+    func test_USD_to_INR_conversion() {
+        let amount = app.textFields["AmountTextField"]
+        amount.tap()
+                
+        let deleteKey = app/*@START_MENU_TOKEN@*/.keys["delete"]/*[[".keyboards.keys[\"delete\"]",".keys[\"delete\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        deleteKey.tap()
+        deleteKey.tap()
+        deleteKey.tap()
+        deleteKey.tap()
+                
+        amount.typeText("1.0")
+        
+        let convertButton = app.buttons["ConvertButton"]
+        convertButton.tap()
+        
+        waitTillProgressViewIsVisible()
+        
+        let resultText = app.staticTexts["ResultText"]
+        XCTAssertEqual(resultText.label,"$1.00 = ₹78.90")
+    }
+    
+    func test_same_currency_error() {
+        let fromCurrencyPicker = app.scrollViews.otherElements.buttons["FromCurrencyPicker"]
+        let toCurrencyPicker = app.scrollViews.otherElements.buttons["ToCurrencyPicker"]
+                                
+        fromCurrencyPicker.tap()
+        app.collectionViews.buttons["USD - American Dollar"].tap()
+        
+        toCurrencyPicker.tap()
+        app.collectionViews.buttons["USD - American Dollar"].tap()
+        
+        let convertButton = app.buttons["ConvertButton"]
+        convertButton.tap()
+        
+        let errorText = app.staticTexts["ErrorText"]
+        XCTAssertEqual(errorText.label,"from and to fields can't be same")
+    }
+    
+    func test_symbol_change_in_amount_when_from_field_changes () {
+        let fromCurrencyPicker = app.scrollViews.otherElements.buttons["FromCurrencyPicker"]
+        let amount = app.textFields["AmountTextField"]
+        
+        XCTAssertTrue((amount.value as! String).contains("$"))
+        
+        fromCurrencyPicker.tap()
+        app.collectionViews.buttons["AUD - Australian Dollar"].tap()
+                
+        XCTAssertTrue((amount.value as! String).contains("A$"))
+        
+    }
+    
+    func waitTillProgressViewIsVisible () {
+        let progress = app.progressIndicators["ProgressView"]
+        let doesNotExistPredicate = NSPredicate(format: "exists == FALSE")
+         expectation(for: doesNotExistPredicate, evaluatedWith: progress, handler: nil)
+         waitForExpectations(timeout: 5.0, handler: nil)
     }
 
     func testLaunchPerformance() throws {
