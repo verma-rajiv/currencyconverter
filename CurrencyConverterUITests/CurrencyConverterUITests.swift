@@ -13,7 +13,7 @@ class CurrencyConverterUITests: XCTestCase {
     override func setUp() {
         super.setUp()
         app = XCUIApplication()
-        app.launchArguments = ["runInTestMode"]        
+        app.launchArguments = ["-runInTestMode"]        
         app.launch()
         
         waitTillProgressViewIsVisible()

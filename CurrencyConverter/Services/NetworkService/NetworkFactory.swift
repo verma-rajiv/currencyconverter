@@ -15,6 +15,6 @@ class NetworkFactory {
     
     public func getNetworkService() -> NetworkServiceProtocol  {
         let isTestModeON = ProcessInfo.processInfo.arguments.contains("-runInTestMode")
-        return isTestModeON ? NetworkService() : MockedNetworkService()
+        return !isTestModeON ? NetworkService() : MockedNetworkService()
     }
 }
