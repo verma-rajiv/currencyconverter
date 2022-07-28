@@ -14,7 +14,8 @@ class CurrencyConverterTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        viewModel = CurrencyConversionViewModel(service: MockedCurrencyConversionService())
+        let networkService = MockedNetworkService()
+        viewModel = CurrencyConversionViewModel(service: CurrencyConversionService(networkService: networkService))
     }
     
     func test_currencies_are_loaded_successfully() {
@@ -29,16 +30,16 @@ class CurrencyConverterTests: XCTestCase {
         }
         viewModel.loadCurrencies()
         wait(for: [expectation], timeout: 1)
-        XCTAssertEqual(currencies.count, 4)
+        XCTAssertEqual(currencies.count, 32)
         subscribe.cancel()
     }
     
     func test_error_when_server_not_reachable_while_loading_currencies() {
-        let currenyService = MockedCurrencyConversionService()
-        currenyService.mockServerUnreachable = true
-        let viewModel = CurrencyConversionViewModel(service: currenyService)
+        let networkService = MockedNetworkService()
+        networkService.mockedStatusCode = 503
+        let viewModel = CurrencyConversionViewModel(service: CurrencyConversionService(networkService: networkService))
         
-        let expectedErrorMessage = "The operation couldn’t be completed. (CurrencyConverter.CurrencyConversionServiceError error 0.)"
+        let expectedErrorMessage = "Service Unreachable. Please try after sometime!"
         var actualErrorMessage: String? = ""
         let expectation = XCTestExpectation(description: "Waiting for currencies service to fail because of network error")
         
@@ -59,11 +60,11 @@ class CurrencyConverterTests: XCTestCase {
     
     
     func test_error_when_server_not_reachable_while_conversion_call () {
-        let currenyService = MockedCurrencyConversionService()
-        currenyService.mockServerUnreachable = true
-        let viewModel = CurrencyConversionViewModel(service: currenyService)
+        let networkService = MockedNetworkService()
+        networkService.mockedStatusCode = 503
+        let viewModel = CurrencyConversionViewModel(service: CurrencyConversionService(networkService: networkService))
         
-        let expectedErrorMessage = "The operation couldn’t be completed. (CurrencyConverter.CurrencyConversionServiceError error 0.)"
+        let expectedErrorMessage = "Service Unreachable. Please try after sometime!"
         var actualErrorMessage: String? = ""
         let expectation = XCTestExpectation(description: "Waiting for conversion service to fail because of network error")
         
@@ -80,6 +81,130 @@ class CurrencyConverterTests: XCTestCase {
         wait(for: [expectation], timeout: 5)
         XCTAssertEqual(actualErrorMessage, expectedErrorMessage)
         subscribe.cancel()
+    }
+    
+    func test_error_for_request_timeout () {
+        let networkService = MockedNetworkService()
+        networkService.mockedStatusCode = 408
+        let viewModel = CurrencyConversionViewModel(service: CurrencyConversionService(networkService: networkService))
+        
+        let expectedErrorMessage = "Server is unable to process the request. Most of the time this is temporary issue. Please try again!"
+        var actualErrorMessage: String? = ""
+        let expectation = XCTestExpectation(description: "Waiting for conversion service to fail because of network error")
+        
+        let subscribe = viewModel.$errorMessage.sink { completion in
+            // not for our use
+            //expectation.fulfill()
+        } receiveValue: { value in
+            guard value != nil else { return }
+            actualErrorMessage  = value
+            expectation.fulfill()
+        }
+        viewModel.convert(amount: 1.0, from: "USD", to: "INR")
+        
+        wait(for: [expectation], timeout: 5)
+        XCTAssertEqual(actualErrorMessage, expectedErrorMessage)
+        subscribe.cancel()
+    }
+    
+    func test_error_for_access_denied () {
+        let networkService = MockedNetworkService()
+        networkService.mockedStatusCode = 401
+        let viewModel = CurrencyConversionViewModel(service: CurrencyConversionService(networkService: networkService))
+        
+        let expectedErrorMessage = "Access Denied. Please make sure you are authorized to access this service."
+        var actualErrorMessage: String? = ""
+        let expectation = XCTestExpectation(description: "Waiting for conversion service to fail because of network error")
+        
+        let subscribe = viewModel.$errorMessage.sink { completion in
+            // not for our use
+            //expectation.fulfill()
+        } receiveValue: { value in
+            guard value != nil else { return }
+            actualErrorMessage  = value
+            expectation.fulfill()
+        }
+        viewModel.convert(amount: 1.0, from: "USD", to: "INR")
+        
+        wait(for: [expectation], timeout: 5)
+        XCTAssertEqual(actualErrorMessage, expectedErrorMessage)
+        subscribe.cancel()
+    }
+    
+    func test_error_for_internal_server_error () {
+        let networkService = MockedNetworkService()
+        networkService.mockedStatusCode = 500
+        let viewModel = CurrencyConversionViewModel(service: CurrencyConversionService(networkService: networkService))
+        
+        let expectedErrorMessage = "Internal Server Error"
+        var actualErrorMessage: String? = ""
+        let expectation = XCTestExpectation(description: "Waiting for conversion service to fail because of network error")
+        
+        let subscribe = viewModel.$errorMessage.sink { completion in
+            // not for our use
+            //expectation.fulfill()
+        } receiveValue: { value in
+            guard value != nil else { return }
+            actualErrorMessage  = value
+            expectation.fulfill()
+        }
+        viewModel.convert(amount: 1.0, from: "USD", to: "INR")
+        
+        wait(for: [expectation], timeout: 5)
+        XCTAssertEqual(actualErrorMessage, expectedErrorMessage)
+        subscribe.cancel()
+    }
+    
+    func test_unknown_error () {
+        let networkService = MockedNetworkService()
+        networkService.mockedStatusCode = 303
+        let viewModel = CurrencyConversionViewModel(service: CurrencyConversionService(networkService: networkService))
+        
+        let expectedErrorMessage = "Something went wrong. Please report this issue by sending an email to admin@currencyconverter.com"
+        var actualErrorMessage: String? = ""
+        let expectation = XCTestExpectation(description: "Waiting for conversion service to fail because of network error")
+        
+        let subscribe = viewModel.$errorMessage.sink { completion in
+            // not for our use
+            //expectation.fulfill()
+        } receiveValue: { value in
+            guard value != nil else { return }
+            actualErrorMessage  = value
+            expectation.fulfill()
+        }
+        viewModel.convert(amount: 1.0, from: "USD", to: "INR")
+        
+        wait(for: [expectation], timeout: 5)
+        XCTAssertEqual(actualErrorMessage, expectedErrorMessage)
+        subscribe.cancel()
+    }
+    
+    
+    func test_error_invaid_url() {
+        let networkService = MockedNetworkService()
+        
+        // initialize curreny service with invalid path
+        let invalidBasePath = "@^@#*"
+        let viewModel = CurrencyConversionViewModel(service: CurrencyConversionService(networkService: networkService, basePath: invalidBasePath))
+        
+        let expectedErrorMessage = "Invalid URL"
+        var actualErrorMessage: String? = ""
+        let expectation = XCTestExpectation(description: "Waiting for conversion service to fail because of network error")
+        
+        let subscribe = viewModel.$errorMessage.sink { completion in
+            // not for our use
+            //expectation.fulfill()
+        } receiveValue: { value in
+            guard value != nil else { return }
+            actualErrorMessage  = value
+            expectation.fulfill()
+        }
+        viewModel.convert(amount: 1.0, from: "USD", to: "INR")
+        
+        wait(for: [expectation], timeout: 5)
+        XCTAssertEqual(actualErrorMessage, expectedErrorMessage)
+        subscribe.cancel()
+        
     }
     
     func test_conversion_of_1_USD_to_7890_INR() {
@@ -131,6 +256,7 @@ class CurrencyConverterTests: XCTestCase {
         
         subscribe.cancel()
     }
+    
     
     func test_amount_from_to_validation() {
         viewModel.convert(amount: 0.0, from: "USD", to: "INR")

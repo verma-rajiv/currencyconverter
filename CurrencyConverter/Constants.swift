@@ -20,5 +20,20 @@ struct Constants {
     struct ErrorMessages {
         static let amountGreaterThanZeroMessage = "please enter an amount greater than zero"
         static let sameCurrencySymbolsErrorMessage = "from and to fields can't be same"
+        
+        static let InvalidURL = "Invalid URL"
+        static let InternalServerError = "Internal Server Error"
+        static let ServerUnreachable = "Service Unreachable. Please try after sometime!"
+        static let AccessDenied = "Access Denied. Please make sure you are authorized to access this service."
+        static let RequestTimeOut = "Server is unable to process the request. Most of the time this is temporary issue. Please try again!"
+        static let Unknown = "Something went wrong. Please report this issue by sending an email to admin@currencyconverter.com"
+        
+    }
+    struct Currencies {
+        static let USD = "USD"
+        static let INR = "INR"
+    }
+    struct NetworkConfig {
+        static let basePath = "https://api.frankfurter.app"
     }
 }

@@ -13,9 +13,8 @@ class CurrencyConverterUITests: XCTestCase {
     override func setUp() {
         super.setUp()
         app = XCUIApplication()
-        app.launchArguments = ["-runInTestMode"]
+        app.launchArguments = ["runInTestMode"]        
         app.launch()
-        
         
         waitTillProgressViewIsVisible()
         sleep(1)
@@ -29,7 +28,7 @@ class CurrencyConverterUITests: XCTestCase {
         
         // assert default values
         XCTAssertEqual(amount.value as? String, "$1.00")
-        XCTAssertEqual(fromCurrencyPicker.value as? String, "USD - American Dollar")
+        XCTAssertEqual(fromCurrencyPicker.value as? String, "USD - United States Dollar")
         XCTAssertEqual(toCurrencyPicker.value as? String, "INR - Indian Rupee")
     }
         
@@ -37,7 +36,7 @@ class CurrencyConverterUITests: XCTestCase {
         let amount = app.textFields["AmountTextField"]
         amount.tap()
                 
-        let deleteKey = app/*@START_MENU_TOKEN@*/.keys["delete"]/*[[".keyboards.keys[\"delete\"]",".keys[\"delete\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        let deleteKey = app/*@START_MENU_TOKEN@*/.keyboards.keys["delete"]/*[[".keyboards.keys[\"delete\"]",".keys[\"delete\"]"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/
         deleteKey.tap()
         deleteKey.tap()
         deleteKey.tap()
@@ -59,10 +58,10 @@ class CurrencyConverterUITests: XCTestCase {
         let toCurrencyPicker = app.scrollViews.otherElements.buttons["ToCurrencyPicker"]
                                 
         fromCurrencyPicker.tap()
-        app.collectionViews.buttons["USD - American Dollar"].tap()
+        app.collectionViews.buttons["USD - United States Dollar"].tap()
         
         toCurrencyPicker.tap()
-        app.collectionViews.buttons["USD - American Dollar"].tap()
+        app.collectionViews.buttons["USD - United States Dollar"].tap()
         
         let convertButton = app.buttons["ConvertButton"]
         convertButton.tap()
@@ -78,11 +77,12 @@ class CurrencyConverterUITests: XCTestCase {
         XCTAssertTrue((amount.value as! String).contains("$"))
         
         fromCurrencyPicker.tap()
-        app.collectionViews.buttons["AUD - Australian Dollar"].tap()
+        app.collectionViews.buttons["MXN - Mexican Peso"].tap()
                 
-        XCTAssertTrue((amount.value as! String).contains("A$"))
+        XCTAssertTrue((amount.value as! String).contains("MX$"))
         
     }
+    
     
     func waitTillProgressViewIsVisible () {
         let progress = app.progressIndicators["ProgressView"]

@@ -143,8 +143,10 @@ struct CurrencyConversionView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        let mockService = MockedCurrencyConversionService()
-        let viewModel = CurrencyConversionViewModel(service: mockService)
+        // This mocked network service is useful to view fully loaded UI in the Preview Canvas
+        let networkService = MockedNetworkService()
+        let currencyService = CurrencyConversionService(networkService: networkService)
+        let viewModel = CurrencyConversionViewModel(service: currencyService)
         CurrencyConversionView(viewModel: viewModel)
     }
 }

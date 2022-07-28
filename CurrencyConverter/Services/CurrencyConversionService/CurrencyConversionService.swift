@@ -9,28 +9,36 @@ import Foundation
 
 
 enum CurrencyConversionServiceError: Error {
-    case InvalidURL
-    case IncorrectCurrencyCode
-    case NotAvailable(_ message: String)
-    case Unknown
+    case InvalidURL    
+}
+
+
+extension CurrencyConversionServiceError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .InvalidURL:
+            return NSLocalizedString(Constants.ErrorMessages.InvalidURL, comment: "")
+        }
+    }
 }
 
 class CurrencyConversionService: CurrencyConversionServiceProtocol {
+    var networkService: NetworkServiceProtocol
     var basePath: String
     
-    init(basePath: String = "https://api.frankfurter.app") {
+    init(networkService: NetworkServiceProtocol = NetworkFactory.shared.getNetworkService(),
+         basePath: String = Constants.NetworkConfig.basePath) {
+        self.networkService = networkService
         self.basePath = basePath
     }
-
-    func convertCurrency(from: String, to: String, amount: Double) async throws -> CurrencyInfo {     
+    
+    func convertCurrency(from: String, to: String, amount: Double) async throws -> CurrencyInfo {
         let url = URL(string: "\(basePath)/latest?amount=\(amount)&from=\(from)&to=\(to)")
         guard let url = url else {
             throw CurrencyConversionServiceError.InvalidURL
         }
         
-        let (data, _) = try await URLSession.shared.data(from: url)
-        let currencyInfo =  try JSONDecoder().decode(CurrencyInfo.self, from: data)
-                
+        let currencyInfo: CurrencyInfo = try await self.networkService.get(CurrencyInfo.self, from: url)
         return currencyInfo
     }
     
@@ -41,8 +49,9 @@ class CurrencyConversionService: CurrencyConversionServiceProtocol {
             throw CurrencyConversionServiceError.InvalidURL
         }
         
-        let (data, _) = try await URLSession.shared.data(from: url)
-        let currencies =  try JSONDecoder().decode(Dictionary<String, String>.self, from: data)
+        let currencies = try await self.networkService.get(Dictionary<String, String>.self, from: url)
+        
+        // traverse the currencies to generate Currency Model Objects
         let currenciesObjects = currencies.map { (key: String, value: String) in
             Currency(code: key, name: value)
         }

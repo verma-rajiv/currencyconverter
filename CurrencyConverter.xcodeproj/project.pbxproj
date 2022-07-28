@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C2271CDE289273A2003F5712 /* NetworkFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2271CDD289273A2003F5712 /* NetworkFactory.swift */; };
+		C25BCB3F28916D3800E9F9A2 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25BCB3E28916D3800E9F9A2 /* NetworkService.swift */; };
+		C25BCB43289172FF00E9F9A2 /* MockedNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25BCB42289172FF00E9F9A2 /* MockedNetworkService.swift */; };
+		C25BCB452891730D00E9F9A2 /* NetworkServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25BCB442891730D00E9F9A2 /* NetworkServiceProtocol.swift */; };
 		C272313E28892AEE00280492 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C272313D28892AEE00280492 /* Constants.swift */; };
 		C2EF1C7F28854E0200395BB8 /* CurrencyConverterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EF1C7E28854E0200395BB8 /* CurrencyConverterApp.swift */; };
 		C2EF1C8128854E0200395BB8 /* CurrencyConversionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EF1C8028854E0200395BB8 /* CurrencyConversionView.swift */; };
@@ -20,7 +24,6 @@
 		C2EF1CB028854F4500395BB8 /* CurrencyConversionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EF1CAF28854F4500395BB8 /* CurrencyConversionViewModel.swift */; };
 		C2EF1CB32885505B00395BB8 /* CurrencyConversionServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EF1CB22885505B00395BB8 /* CurrencyConversionServiceProtocol.swift */; };
 		C2EF1CB528868ADA00395BB8 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EF1CB428868ADA00395BB8 /* Currency.swift */; };
-		C2EF1CB92886A5EF00395BB8 /* MockedCurrencyConversionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EF1CB82886A5EF00395BB8 /* MockedCurrencyConversionService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +44,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C2271CDD289273A2003F5712 /* NetworkFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkFactory.swift; sourceTree = "<group>"; };
+		C25BCB3E28916D3800E9F9A2 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		C25BCB42289172FF00E9F9A2 /* MockedNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedNetworkService.swift; sourceTree = "<group>"; };
+		C25BCB442891730D00E9F9A2 /* NetworkServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceProtocol.swift; sourceTree = "<group>"; };
 		C272313D28892AEE00280492 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C2EF1C7B28854E0200395BB8 /* CurrencyConverter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CurrencyConverter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2EF1C7E28854E0200395BB8 /* CurrencyConverterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConverterApp.swift; sourceTree = "<group>"; };
@@ -57,7 +64,6 @@
 		C2EF1CAF28854F4500395BB8 /* CurrencyConversionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConversionViewModel.swift; sourceTree = "<group>"; };
 		C2EF1CB22885505B00395BB8 /* CurrencyConversionServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConversionServiceProtocol.swift; sourceTree = "<group>"; };
 		C2EF1CB428868ADA00395BB8 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
-		C2EF1CB82886A5EF00395BB8 /* MockedCurrencyConversionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedCurrencyConversionService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +91,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C25BCB4028916D5200E9F9A2 /* CurrencyConversionService */ = {
+			isa = PBXGroup;
+			children = (
+				C2EF1CA928854E5C00395BB8 /* CurrencyConversionService.swift */,
+			);
+			path = CurrencyConversionService;
+			sourceTree = "<group>";
+		};
+		C25BCB4128916D6E00E9F9A2 /* NetworkService */ = {
+			isa = PBXGroup;
+			children = (
+				C25BCB3E28916D3800E9F9A2 /* NetworkService.swift */,
+				C25BCB42289172FF00E9F9A2 /* MockedNetworkService.swift */,
+				C2271CDD289273A2003F5712 /* NetworkFactory.swift */,
+			);
+			path = NetworkService;
+			sourceTree = "<group>";
+		};
 		C2EF1C7228854E0200395BB8 = {
 			isa = PBXGroup;
 			children = (
@@ -149,8 +173,8 @@
 			isa = PBXGroup;
 			children = (
 				C2EF1CB72886A53100395BB8 /* Protocols */,
-				C2EF1CA928854E5C00395BB8 /* CurrencyConversionService.swift */,
-				C2EF1CB82886A5EF00395BB8 /* MockedCurrencyConversionService.swift */,
+				C25BCB4028916D5200E9F9A2 /* CurrencyConversionService */,
+				C25BCB4128916D6E00E9F9A2 /* NetworkService */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -176,6 +200,7 @@
 			isa = PBXGroup;
 			children = (
 				C2EF1CB22885505B00395BB8 /* CurrencyConversionServiceProtocol.swift */,
+				C25BCB442891730D00E9F9A2 /* NetworkServiceProtocol.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -310,13 +335,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C25BCB3F28916D3800E9F9A2 /* NetworkService.swift in Sources */,
 				C2EF1CB32885505B00395BB8 /* CurrencyConversionServiceProtocol.swift in Sources */,
+				C25BCB43289172FF00E9F9A2 /* MockedNetworkService.swift in Sources */,
 				C2EF1CAD28854E8200395BB8 /* CurrencyInfo.swift in Sources */,
-				C2EF1CB92886A5EF00395BB8 /* MockedCurrencyConversionService.swift in Sources */,
 				C2EF1C8128854E0200395BB8 /* CurrencyConversionView.swift in Sources */,
 				C2EF1C7F28854E0200395BB8 /* CurrencyConverterApp.swift in Sources */,
 				C2EF1CAA28854E5C00395BB8 /* CurrencyConversionService.swift in Sources */,
+				C25BCB452891730D00E9F9A2 /* NetworkServiceProtocol.swift in Sources */,
 				C2EF1CB528868ADA00395BB8 /* Currency.swift in Sources */,
+				C2271CDE289273A2003F5712 /* NetworkFactory.swift in Sources */,
 				C2EF1CB028854F4500395BB8 /* CurrencyConversionViewModel.swift in Sources */,
 				C272313E28892AEE00280492 /* Constants.swift in Sources */,
 			);

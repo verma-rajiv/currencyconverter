@@ -52,11 +52,11 @@ final class CurrencyConversionViewModel: ObservableObject {
     var currencyFormatter: NumberFormatter
     
     init(service: CurrencyConversionServiceProtocol = CurrencyConversionService()) {
-        let mode = ProcessInfo.processInfo.arguments.contains("-runInTestMode")
-        self.service = mode ? MockedCurrencyConversionService() : service 
+//        let mode = ProcessInfo.processInfo.arguments.contains("-runInTestMode")
+        self.service = service
         self.amount = 1
-        self.from = "USD"
-        self.to = "INR"
+        self.from = Constants.Currencies.USD
+        self.to = Constants.Currencies.INR
         self.currencyConversionResult = ""
                 
         let formatter = NumberFormatter()
@@ -82,12 +82,12 @@ final class CurrencyConversionViewModel: ObservableObject {
         self.currencyInfo = nil
            
         guard  amount > 0.0 else {
-            self.errorMessage = "please enter an amount greater than zero"
+            self.errorMessage = Constants.ErrorMessages.amountGreaterThanZeroMessage
             return
         }
         
         guard from != to else {
-            self.errorMessage = "from and to fields can't be same"
+            self.errorMessage = Constants.ErrorMessages.sameCurrencySymbolsErrorMessage
             return
         }
         
